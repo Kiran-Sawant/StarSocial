@@ -4,14 +4,23 @@
 
 {% load bootstrap4 %}
 
-{% block post_content %}
-    <h4>Create a new Post</h4>
-    <form action="{% url 'posts:create' %}" method="post">
-        {% csrf_token %}
-        {% bootstrap_form form %}
 
-        <input type="submit" value="Post" class="btn btn-primary btn-large">
-    </form>
+{% block prepost %}
+    <div class="col-md-4 mt-3">
+        <h4>Create a new Post</h4>
+    </div>
+{% endblock prepost %}
+    
+
+{% block post_content %}
+    <div class="col-md-8  mt-3">
+        <form action="{% url 'posts:create' %}" method="post">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <input type="submit" value="Post" class="btn btn-primary btn-large">
+        </form>
+    </div>
     
 {% endblock post_content %}
     
