@@ -4,16 +4,17 @@
 
 <!-- Contents before the groups list -->
 {% block pregroup %}
-    <div class="col-md-4">
+    <div class="col-md-4 mt-2">
         <div class="content">
             {% if user.is_authenticated %}
-                <h2>Welcome Back!
+                <h2>Welcome Back! <br>
                     <!-- Link to users Profile -->
                     <a href="{% url 'posts:for_user' username=user.username %}">
-                        @{{user.username}}
+                        <small>@{{user.username}}</small>
                     </a>
                 </h2>
             {% endif %}
+            <br>
             <h2>Groups</h2>
             <p>Welcome to groups page!</p>
 
@@ -33,13 +34,13 @@
         <div class="list-group">
             
             {% for group in object_list %}
-                <a href="{% url 'groups:single' slug=group.slug %}" class="list-group-item rounded-lg mt-2" style=width:70%;>
-                    <h3 class="title list-group-item-heading">
+                <a href="{% url 'groups:single' slug=group.slug %}" class="list-group-item rounded-lg mt-2 " style="width:30em; color: black;">
+                    <h3 class="title">
                         {{group.name}}
                     </h3>
 
-                    <div class="list-group-item-text container-fluid">
-                        {{ group.description_html|safe }}
+                    <div class="container-fluid">
+                        <p>{{ group.description_html|safe }}</p>
                         <div class="row">
                             <div class="col-md-4">      <!--Number of members in a group-->
                                 <span class="badge badge-info">{{ group.members.count }}</span>
