@@ -30,7 +30,7 @@ class Group(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)      # Converting group name to slug.
-        self.description_html = misaka.html(self.description_html)      
+        self.description_html = misaka.html(self.description)
 
         super().save(*args, **kwargs)
 
