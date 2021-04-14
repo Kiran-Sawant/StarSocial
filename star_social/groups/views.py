@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import generic as gen
+from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth.mixins import (LoginRequiredMixin, PermissionRequiredMixin)
 from django.urls import (reverse, reverse_lazy)
 from django.shortcuts import get_object_or_404
@@ -7,6 +8,7 @@ from django.contrib import messages
 from django.db import IntegrityError
 
 from . import models
+from posts.models import Post
 
 # Create your views here.
 class CreateGroup(LoginRequiredMixin, gen.CreateView):
@@ -16,10 +18,18 @@ class CreateGroup(LoginRequiredMixin, gen.CreateView):
     fields = ('name', 'description')
 
 
-class SingleGroup(gen.DetailView):
+class SingleGroup(gen.DetailView, MultipleObjectMixin):
     """Detail view of a single Group instance."""
 
     model = models.Group
+
+    paginate_by = 5
+
+    def get_context_data(self, **kwargs):
+        object_list = Post.objects.filter(group=self.object)
+        context = super(SingleGroup, self).get_context_data(object_list=object_list, **kwargs)
+        return context
+
 
 
 class ListGroup(gen.ListView):
