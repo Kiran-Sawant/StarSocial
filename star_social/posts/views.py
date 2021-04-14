@@ -20,11 +20,14 @@ class PostList(SelectRelatedMixin, gen.ListView):
     model = models.Post
     select_related = ('user', 'group')
 
+    paginate_by = 6
 
 class UserPosts(gen.ListView):
     """A view for list of posts by a User."""
     model = models.Post
     template_name = 'posts/user_post_list.html'
+
+    paginate_by = 6
 
     def get_queryset(self):
         """Get a query set of posts where user in Post is current User"""
@@ -56,6 +59,7 @@ class PostDetail(SelectRelatedMixin, gen.DetailView):
 class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
     
     model = models.Post
+    select_related = (u'user', u'group')
     fields = ('message', 'group')
 
     def form_valid(self, form):
