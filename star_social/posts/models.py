@@ -44,9 +44,14 @@ class Comments(models.Model):
     """Test class for comments."""
 
     post = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    author = models.ForeignKey(User, related_name='comment', on_delete=models.CASCADE)
+    author = models.ForeignKey(User, editable=False, related_name='my_comments', on_delete=models.CASCADE)
     text = models.TextField(max_length=200)
     created_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.text
+
+    class Meta:
+        ordering = ['-created_on']
+
+    
