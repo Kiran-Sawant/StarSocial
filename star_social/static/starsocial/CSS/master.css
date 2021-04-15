@@ -1,10 +1,10 @@
 body{
     margin: 0;
-    overflow: hidden;
+    overflow: scroll;
     background-color: rgba(2, 10, 53, 0.767);
-    color: white;
+    /* color: white; */
 }
 
-small{
-    color: rgb(241, 241, 241);
+nav{
+    position: ;
 }
