@@ -1,0 +1,25 @@
+{% extends 'posts/post_base.html' %}
+
+{% load bootstrap4 %}
+
+{% block prepost %}
+    <div class="col-md-4">
+        <h3>Add Comment to post:</h3>
+    </div>
+{% endblock prepost %}
+
+
+{% block post_content %}
+    <div class="col md 8">
+        {% include 'posts/_post.html' with post=post %}
+        <hr>
+        <form method="POST">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+
+            <button type="submit" class='btn btn-primary'>Post Comment</button>
+        </form>
+    </div>
+{% endblock post_content %}
+    
+    
