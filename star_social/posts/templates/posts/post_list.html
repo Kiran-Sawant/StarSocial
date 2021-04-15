@@ -4,16 +4,17 @@
 
 
 {% block prepost %}
-    <div class="col-md-4">
-        
+
+    <div class="col-md-4 mt-3">
+        <!--
         {% if request.user.is_authenticated %}
             <div class="card shadow">
                 <div class="content">
-                    <h5 class="title">Your Groups</h5>
+                    <h5 class="title bg-dark">Your Groups</h5>
                     <ul class="list-unstyled">
-                        
+                        {# {% get_user_groups as user_groups %} #}
                         {% for member_group in get_user_groups %}
-                            <li class="group li-with-bullet">
+                            <li class="group">
                                 <a href="{% url 'groups:single' slug=member_group.group.slug %}"> member_group.group.name </a>
                             </li>
                         {% endfor %}
@@ -25,26 +26,55 @@
         {% endif %}
             <div class="card shadow">
                 <div class="content">
-                    <h5 class="title">All Groups</h5>
-                    <ul>
-                        {% for other_group in get_other_grouups %}
+                    <h5 class="title ml-5">All Groups</h5>
+                    <ul class="list-unstyled">
+                        {# {% get_other_groups as other_groups %} #}
+                        {% for other_group in get_other_groups %}
                             <li class="group li-with-bullet">
                                 <a href="{% url 'groups:single' slug=other_group.slug %}">other_group.name</a>
                             </li>
                         {% endfor %}
                     </ul>
                 </div>
-            </div>            
+            </div>-->
+            <h3>All Posts</h3>
     </div>
 {% endblock %}
 
 
 {% block post_content %}
-    <div class="col-md-8">
+    <div class="col-md-8 mt-3">
         
         {% for post in post_list %}
-            {% include 'posts/_post.html' %}
+            <a href="{% url 'posts:single' username=post.user.username pk=post.id %}" style="color: white;">
+                {% include 'posts/_post.html' %}
+            </a>
         {% endfor %}
+        
+        <!-- Django pagination -->
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <a class='btn btn-outline-info mb-4'href="?page=1">First</a>
+                <a class='btn btn-outline-info mb-4'href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            
+            {% for num in page_obj.paginator.page_range %}
+                
+                {% if page_obj.number == num %}
+                    <a class='btn btn-info mb-4'href="?page={{ num }}">{{ num }}</a>
+                {% elif  num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <a class='btn btn-outline-info mb-4'href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+                    
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class='btn btn-info mb-4'href="?page={{ page_ob.next_page_number }}">Next</a>
+                <a class='btn btn-info mb-4'href="?page={{ page_obj.paginator.num_pages }}">Previous</a>
+            {% endif %}
+                
+        {% endif %}
             
     </div>
     
