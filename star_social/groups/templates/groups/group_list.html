@@ -10,7 +10,7 @@
                 <h2>Welcome Back! <br>
                     <!-- Link to users Profile -->
                     <a href="{% url 'posts:for_user' username=user.username %}">
-                        <small>@{{user.username}}</small>
+                        <small style="color: gold;">@{{user.username}}</small>
                     </a>
                 </h2>
             {% endif %}
@@ -30,17 +30,17 @@
 
 <!-- Individual content in the list -->
 {% block group_content %}
-    <div class="col-md-8">
+    <div class="col-md-8" style="max-height: 100vh; overflow-y: auto; overflow-x: hidden;">
         <div class="list-group">
             
             {% for group in object_list %}
                 <a href="{% url 'groups:single' slug=group.slug %}" class="list-group-item rounded-lg mt-2 " style="width:30em; color: black;">
-                    <h3 class="title">
+                    <h3 class="title" style="color: black;">
                         {{group.name}}
                     </h3>
 
                     <div class="container-fluid">
-                        <p>{{ group.description_html|safe }}</p>
+                        <p style="color: rgb(99, 99, 99);">{{ group.description_html|safe }}</p>
                         <div class="row">
                             <div class="col-md-4">      <!--Number of members in a group-->
                                 <span class="badge badge-info">{{ group.members.count }}</span>
