@@ -2,8 +2,56 @@
 
 
 {% block post_content %}
-    <div class="col-md-8">
-        {% include 'posts/_post.html' %}
+    <div class="col-md-8 mt-3">
+        {% include 'posts/_post.html' with trunc=True %}
+    </div>
+    <hr>
+    
+    <!-- Comments block -->
+    <div class="container">
+        <h2>Comments:-</h2>
+        <div class="container ml-3 mt-3" style="width: 50rem;">
+            {% for comment in object_list %}
+                <div class="card bg-dark" style="width: 30em;">
+                    <div class="card-body">
+                        <p class="card-text">{{ comment.text|safe|linebreaks }}</p>
+                        <p>by: <a href="{% url 'posts:for_user' username=comment.author %}" style="color: gold;">@{{ comment.author }}</a></p>
+                        <p class="text-muted">on: {{ comment.created_on }}</p>
+                        
+                        {% if user.is_authenticated and comment.author == user %}
+                            <a href="{% url 'posts:remove_comment' pk=comment.pk %}" class="card-link text-danger" style="float:right">Delete</a>
+                        {% endif %}
+                    </div>
+                </div>   <!--card end-->
+                    <hr>
+                    {% empty %}
+                    <h2>Be first to comment!</h2>
+                
+            {% endfor %}
+            <!-- Django pagination -->
+            {% if is_paginated %}
+                {% if page_obj.has_previous %}
+                    <a class='btn btn-outline-info mb-4'href="?page=1">First</a>
+                    <a class='btn btn-outline-info mb-4'href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+   
+                {% for num in page_obj.paginator.page_range %}
+                        
+                    {% if page_obj.number == num %}
+                        <a class='btn btn-info mb-4'href="?page={{ num }}">{{ num }}</a>
+                    {% elif  num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a class='btn btn-outline-info mb-4'href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                            
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a class='btn btn-info mb-4'href="?page={{ page_ob.next_page_number }}">Next</a>
+                    <a class='btn btn-info mb-4'href="?page={{ page_obj.paginator.num_pages }}">Previous</a>
+                {% endif %}                    
+            {% endif %}
+        </div>
+            
     </div>
 {% endblock post_content %}
     
