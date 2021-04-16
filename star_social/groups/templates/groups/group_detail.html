@@ -1,10 +1,14 @@
 {% extends "groups/group_base.html" %}
 
 {% block pregroup %}
-    <div class="col-md-4 mt-3">
-        <h1>{{ group.name }}</h1>
+    <div class="col-lg-4 mt-3" style="width: 20rem;">
+        <h1><u>{{ group.name }}</u></h1>
+        <div class="mb-1">
+            <p>{{ group.description_html|safe }}</p>
+            <hr style="border-color: gold;">
+        </div>
         <h5>{{group.members.count}} Member{{group.members.count|pluralize}}</h5>
-        <br>
+        
         <div class="content">
             {% if user in group.members.all %}  <!--If the active user is in this group-->
                 <!-- Leave Group Button -->
@@ -14,11 +18,12 @@
                 <a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-success">Join Group</a>
             {% endif %}
         </div>
+        <hr style="border-color: gold;">
     </div>
 {% endblock %}
 
 {% block group_content %}
-    <div class="col-md-8 mt-3">
+    <div class="col-lg-8 mt-3">
         {% if group.posts.count == 0 %}
             <h2>No posts in this Group yet...</h2>
         {% else %}
