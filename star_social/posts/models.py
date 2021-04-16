@@ -52,6 +52,6 @@ class Comments(models.Model):
         return self.text
 
     class Meta:
-        ordering = ['-created_on']
+        ordering = ['created_on']
 
     
