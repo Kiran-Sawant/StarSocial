@@ -81,6 +81,12 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
         return super().form_valid(form)
 
 
+class UpdatePost(LoginRequiredMixin, gen.UpdateView):
+
+    model = models.Post
+    fields = ('message', )
+
+
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, gen.DeleteView):
 
     model = models.Post
