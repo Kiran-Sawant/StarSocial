@@ -13,9 +13,10 @@
         
         {% for post in post_list %}
         <a href="{% url 'posts:single' username=post.user.username pk=post.id %}" style="color: white;">
-            {% include 'posts/_post.html' %}
+            {% include 'posts/_post.html' with hide_delete=True %}
         </a>
         {% endfor %}
+        
         <!-- Django pagination -->
         {% if is_paginated %}
             {% if page_obj.has_previous %}
