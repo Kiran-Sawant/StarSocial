@@ -10,8 +10,10 @@
     <!-- Comments block -->
     <div class="container">
         <h2>Comments:-</h2>
-        <div class="container ml-3 mt-3" style="width: 50rem;">
+        <div class="container ml-3 mt-3" style="width: 40rem;">
             {% for comment in object_list %}
+            
+                <!-- Comment card -->
                 <div class="card bg-dark" style="width: 30em;">
                     <div class="card-body">
                         <p class="card-text">{{ comment.text|safe|linebreaks }}</p>
@@ -19,15 +21,16 @@
                         <p class="text-muted">on: {{ comment.created_on }}</p>
                         
                         {% if user.is_authenticated and comment.author == user %}
-                            <a href="{% url 'posts:remove_comment' pk=comment.pk %}" class="card-link text-danger" style="float:right">Delete</a>
+                            <a href="{% url 'posts:remove_comment' pk=comment.pk %}" class="card-link text-danger mr-2" style="float:right">Delete</a>
                         {% endif %}
                     </div>
                 </div>   <!--card end-->
-                    <hr>
+                    <hr style="border-color: blanchedalmond;">
                     {% empty %}
                     <h2>Be first to comment!</h2>
                 
             {% endfor %}
+
             <!-- Django pagination -->
             {% if is_paginated %}
                 {% if page_obj.has_previous %}
