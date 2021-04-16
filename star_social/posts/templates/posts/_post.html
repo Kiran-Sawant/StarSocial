@@ -27,6 +27,11 @@
             <!-- {% endif %} -->
 
             {% if user.is_authenticated and post.user == user and not hide_delete %}
+                <!-- Edit Button -->
+                <a class='ml-2' href="{% url 'posts:post_update' pk=post.pk %}" style="color: whitesmoke; border-left: solid white; padding-left: 3mm;">
+                    <b>Edit</b>
+                </a>
+                <!-- Delete button -->
                 <a class="ml-2" href="{% url 'posts:delete' pk=post.pk %}" title="delete" style="color:rgba(248, 95, 68, 0.945); float: right;">
                    <b>Delete</b>
                 </a>
