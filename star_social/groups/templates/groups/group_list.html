@@ -4,7 +4,7 @@
 
 <!-- Contents before the groups list -->
 {% block pregroup %}
-    <div class="col-md-4 mt-2">
+    <div class="col-md-4 mt-2 mb-2">
         <div class="content">
             {% if user.is_authenticated %}
                 <h2>Welcome Back! <br>
@@ -24,18 +24,19 @@
                 <span>Create New Group</span>
             </a>
         {% endif %}
+        <hr style="border-color: blanchedalmond;">
     </div>
 
 {% endblock %}
 
 <!-- Individual content in the list -->
 {% block group_content %}
-    <div class="col-md-8" style="max-height: 100vh; overflow-y: auto; overflow-x: hidden;">
+    <div class="col-md-8">
         <div class="list-group">
             
             {% for group in object_list %}
-                <a href="{% url 'groups:single' slug=group.slug %}" class="list-group-item rounded-lg mt-2 " style="width:30em; color: black;">
-                    <h3 class="title" style="color: black;">
+                <a href="{% url 'groups:single' slug=group.slug %}" class="list-group-item rounded-lg mt-2" style="width:35em; color: honeydew; background-color: rgba(23, 27, 31, 0.5);">
+                    <h3 class="title">
                         {{group.name}}
                     </h3>
 
@@ -47,7 +48,7 @@
                                 member{{group.members.count|pluralize}}
                             </div>
                             <div class="col-md-4">      <!--Number of posts in a group-->
-                                <span class="badge  badge-info">{{ group.posts.count }}</span>
+                                <span class="badge  badge-info">{{ group.groupposts.count }}</span>
                                 post{{group.posts.count|pluralize}}
                             </div>
                         </div>
@@ -55,5 +56,29 @@
                 </a>
             {% endfor %}
         </div>
+            <!-- Django pagination -->
+            <div class="mt-3">
+                {% if is_paginated %}
+                    {% if page_obj.has_previous %}
+                        <a class='btn btn-outline-info mb-4'href="?page=1">First</a>
+                        <a class='btn btn-outline-info mb-4'href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        
+                        {% if page_obj.number == num %}
+                            <a class='btn btn-info mb-4'href="?page={{ num }}">{{ num }}</a>
+                        {% elif  num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a class='btn btn-outline-info mb-4'href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                            
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class='btn btn-info mb-4'href="?page={{ page_ob.next_page_number }}">Next</a>
+                        <a class='btn btn-info mb-4'href="?page={{ page_obj.paginator.num_pages }}">Previous</a>
+                    {% endif %}
+                {% endif %}
+            </div>
     </div>
 {% endblock %}
