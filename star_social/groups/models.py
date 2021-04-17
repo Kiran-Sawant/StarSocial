@@ -19,11 +19,12 @@ class Group(models.Model):
     name(str): Name of the group (should be unique)\n
     description(str): Description of the group."""
 
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(allow_unicode=True, unique=True)
-    description = models.TextField(blank=True, default='')
+    name             = models.CharField(max_length=255, unique=True)
+    slug             = models.SlugField(allow_unicode=True, unique=True)
+    description      = models.TextField(blank=True, default='')
     description_html = models.TextField(editable=False, default='', blank=True)
-    members = models.ManyToManyField(User, through='GroupMember')
+    members          = models.ManyToManyField(User, through='GroupMember')               # One group can hav many users & vice-versa.
+    created_by       = models.ForeignKey(User, related_name='admin', on_delete=models.DO_NOTHING, null=True)
 
     def __str__(self):
         return self.name
@@ -38,12 +39,13 @@ class Group(models.Model):
 
         return reverse('groups:single', kwargs={'slug':self.slug})
 
+
 class GroupMember(models.Model):
     """A Model for defining the many to many relation between groups and users.
     One user can be in many groups & one group can have many users."""
 
     group = models.ForeignKey(Group, related_name='memberships', on_delete=models.CASCADE)
-    user = models.ForeignKey(User, related_name='user_group', on_delete=models.CASCADE)
+    user  = models.ForeignKey(User, related_name='user_group', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.username
