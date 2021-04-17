@@ -10,6 +10,7 @@ from django.contrib import messages
 
 from braces.views import SelectRelatedMixin
 
+from accounts.models import User 
 from . import models
 from . import forms
 
@@ -64,11 +65,41 @@ class PostDetail(SelectRelatedMixin, gen.DetailView, MultipleObjectMixin):
         queryset = super().get_queryset()
         return queryset.filter(user__username__iexact=self.kwargs.get('username'))
 
+    def get_like_url(self):
+        return reverse('posts:like-toggle', kwargs={'username':self.kwargs.get('username'), 
+                                                    'pk':self.kwargs.get('pk')})
+
+
+class PostLikeToggleRedirect(LoginRequiredMixin, gen.RedirectView):
+    
+    def get_redirect_url(self, *args, **kwargs):
+
+        user_name     = self.kwargs.get('username')  # post author name(User)
+        # print(f"{user_name}: type {type(user_name)}")
+        user          = get_object_or_404(User, username=user_name)     # post author(User)
+        # print(f"{user}: type {type(user)}")
+        pk            = self.kwargs.get('pk')        # post pk
+        # print(pk)
+
+        post_obj = get_object_or_404(models.Post, user=user, pk=pk)
+        # print(post_obj)
+        url_ = post_obj.get_absolute_url()
+        user = self.request.user                # active user
+
+        if user.is_authenticated:               # If user is logged in
+            if user in post_obj.likes.all():    # if user has already liked post
+                post_obj.likes.remove(user)
+            else:                               # If user hasn't liked post
+                post_obj.likes.add(user)
+        else:                                   # user not logged-in
+            redirect('login')
+
+        return url_
 
 class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
     
+    select_related = (u'author', u'group')
     model = models.Post
-    select_related = (u'user', u'group')
     fields = ('message', 'group')
 
     def form_valid(self, form):
@@ -76,7 +107,10 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
         with the user field in the Post Model before saving."""
 
         self.object = form.save(commit=False)
+        print(self.object.message)
+        # print(self.object.user.username)
         self.object.user = self.request.user       # connecting the User with the Post
+        print(self.object.user.username)
         self.object.save()
         return super().form_valid(form)
 
@@ -84,13 +118,13 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
 class UpdatePost(LoginRequiredMixin, gen.UpdateView):
 
     model = models.Post
-    fields = ('message', )
-
+    fields = ('message', 'group')
 
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, gen.DeleteView):
 
     model = models.Post
     select_related = ('user', 'group')
+
     success_url = reverse_lazy('posts:all')
 
     def get_queryset(self):
