@@ -7,16 +7,27 @@
             <p>{{ group.description_html|safe }}</p>
             <hr style="border-color: gold;">
         </div>
-        <h5>{{group.members.count}} Member{{group.members.count|pluralize}}</h5>
+        <div class="inline-flex">
+            <span> {{group.members.count}} Member{{group.members.count|pluralize}}</span>
+            <span style="border-left:solid 0.5mm white; padding-left:2mm">{{group.groupposts.count}} Post{{group.groupposts.count|pluralize}}</span>
+        </div>
         
-        <div class="content">
+        <div class="content mt-3">
             {% if user in group.members.all %}  <!--If the active user is in this group-->
                 <!-- Leave Group Button -->
-                <a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-warning">Leave Group</a>
+                <a href="{% url 'groups:leave' slug=group.slug %}" class="btn btn-outline-warning">Leave Group</a>
             {% else %}
                 <!-- Join Group Button -->
                 <a href="{% url 'groups:join' slug=group.slug %}" class="btn btn-success">Join Group</a>
             {% endif %}
+
+            <!-- If active user is group admin -->
+            {% if user == group.created_by %}
+                <a class='btn btn-outline-danger ml-2' href="{% url 'groups:delete' slug=group.slug %}">
+                    Delete Group
+                </a>
+            {% endif %}
+                
         </div>
         <hr style="border-color: gold;">
     </div>
