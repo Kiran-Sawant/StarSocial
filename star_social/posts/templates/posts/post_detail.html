@@ -14,7 +14,7 @@
             {% for comment in object_list %}
             
                 <!-- Comment card -->
-                <div class="card bg-dark" style="width: 30em;">
+                <div class="card" style="width: 30em; background-color: rgba(0, 0, 0, 0.425);">
                     <div class="card-body">
                         <p class="card-text">{{ comment.text|safe|linebreaks }}</p>
                         <p>by: <a href="{% url 'posts:for_user' username=comment.author %}" style="color: gold;">@{{ comment.author }}</a></p>
