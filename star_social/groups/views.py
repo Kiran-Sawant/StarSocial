@@ -17,6 +17,12 @@ class CreateGroup(LoginRequiredMixin, gen.CreateView):
     model = models.Group
     fields = ('name', 'description')
 
+    def form_valid(self, form):
+
+        self.object = form.save(commit=False)
+        self.object.created_by = self.request.user
+        self.object.save()
+        return super().form_valid(form)
 
 class SingleGroup(gen.DetailView, MultipleObjectMixin):
     """Detail view of a single Group instance."""
@@ -31,11 +37,12 @@ class SingleGroup(gen.DetailView, MultipleObjectMixin):
         return context
 
 
-
 class ListGroup(gen.ListView):
     """ListView for a list of all Group instances."""
 
     model = models.Group
+
+    paginate_by = 6
 
 
 class JoinGroup(LoginRequiredMixin, gen.RedirectView):
@@ -85,3 +92,15 @@ class LeaveGroup(LoginRequiredMixin, gen.RedirectView):
             messages.success(self.request, 'You have left the Group!')
 
         return super().get(self.request, *args, **kwargs)
+
+
+class DeleteGroup(LoginRequiredMixin, gen.DeleteView):
+
+    model = models.Group
+    success_url = reverse_lazy("groups:all")
+
+    def delete(self, *args, **kwargs):
+        """overriding Method for deleting instances."""
+
+        messages.success(self.request, "Group Deleted")
+        return super().delete(*args, **kwargs)
