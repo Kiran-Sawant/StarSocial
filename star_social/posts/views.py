@@ -10,7 +10,8 @@ from django.contrib import messages
 
 from braces.views import SelectRelatedMixin
 
-from accounts.models import User 
+from accounts.models import User
+from groups.models import Group
 from . import models
 from . import forms
 
@@ -36,11 +37,11 @@ class UserPosts(gen.ListView):
         """Get a query set of posts where user in Post is current User"""
         try:
             # Fetch the posts by the active User, kwargs passed from urls.py
-            self.post_user = User.objects.prefetch_related('posts').get(username__iexact=self.kwargs.get('username'))
+            self.post_user = User.objects.prefetch_related('author').get(username__iexact=self.kwargs.get('username'))
         except User.DoesNotExist:
             raise Http404
         else:
-            return self.post_user.posts.all()
+            return self.post_user.author.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,7 +72,7 @@ class PostDetail(SelectRelatedMixin, gen.DetailView, MultipleObjectMixin):
 
 
 class PostLikeToggleRedirect(LoginRequiredMixin, gen.RedirectView):
-    
+    """A view for Like button."""
     def get_redirect_url(self, *args, **kwargs):
 
         user_name     = self.kwargs.get('username')  # post author name(User)
@@ -96,10 +97,11 @@ class PostLikeToggleRedirect(LoginRequiredMixin, gen.RedirectView):
 
         return url_
 
+
 class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
     
-    select_related = (u'author', u'group')
     model = models.Post
+    # select_related = (u'user', u'group')
     fields = ('message', 'group')
 
     def form_valid(self, form):
@@ -111,8 +113,31 @@ class CreatePost(LoginRequiredMixin, SelectRelatedMixin, gen.CreateView):
         # print(self.object.user.username)
         self.object.user = self.request.user       # connecting the User with the Post
         print(self.object.user.username)
+        # self.object.group = get_object_or_404(Group, slug=self.kwargs.get('slug'))
+        # print(self.object.group)
         self.object.save()
         return super().form_valid(form)
+
+
+#______________Trying Function based view for Create Post_____________#         # TODO test vigurously
+@login_required
+def CreatePost_(request, pk: int):
+
+    if request.method == 'POST':
+        form = forms.PostForm(request.POST)
+
+        if form.is_valid():
+            post        = form.save(commit=False)
+            post.user   = request.user
+            print(f"This is the group pk:  {pk}")
+            post.group  = get_object_or_404(Group, pk=pk)
+            print(post.group)
+            post.save()
+
+            return redirect(post)
+    else:
+        form = forms.PostForm()
+        return render(request, 'posts/post_form.html', {'form': form, 'group_pk':pk})
 
 
 class UpdatePost(LoginRequiredMixin, gen.UpdateView):
@@ -124,8 +149,8 @@ class DeletePost(LoginRequiredMixin, SelectRelatedMixin, gen.DeleteView):
 
     model = models.Post
     select_related = ('user', 'group')
+    success_url = reverse_lazy("groups:all")
 
-    success_url = reverse_lazy('posts:all')
 
     def get_queryset(self):
         """List of posts by this user"""
