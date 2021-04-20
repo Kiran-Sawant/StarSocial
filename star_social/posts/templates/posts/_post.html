@@ -28,14 +28,12 @@
                 <b>Like{{ post.likes.count|pluralize }}</b>
             </a>
             
-            <!-- Comment Button -->
-            {% if user.is_authenticated %}
-                <a href="{% url 'posts:comment' pk=post.pk %}" style="color: whitesmoke; border-left: solid white; padding-left: 3mm;">
-                    <span class="badge badge-info">{{ post.comments.count }}</span>
-                    <b>Comment{{ post.comments.count|pluralize }}</b>
-                </a>
-            {% endif %}
-
+            <!-- Comment Button --> 
+            <a href="{% url 'posts:comment' pk=post.pk %}" style="color: whitesmoke; border-left: solid white; padding-left: 3mm;">
+                <span class="badge badge-info">{{ post.comments.count }}</span>
+                <b>Comment{{ post.comments.count|pluralize }}</b>
+            </a>
+            
             {% if user.is_authenticated and post.user == user and not hide_delete %}
                 <!-- Edit Button -->
                 <a class='ml-2' href="{% url 'posts:post_update' username=post.user.username pk=post.pk %}" style="color: whitesmoke; border-left: solid white; padding-left: 3mm;">
