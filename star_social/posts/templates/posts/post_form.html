@@ -7,14 +7,16 @@
 
 {% block prepost %}
     <div class="col-md-4 mt-3">
-        <h4>Create a new Post</h4>
+        <h4><u>Create a new Post</u></h4><br>
+        <h5>Posts support Markdown formatting.</h5>
+        <h5>Click <a style="color: gold;" href="https://youtu.be/HUBNt18RFbo">here</a> to learn Markdown</h5>
     </div>
 {% endblock prepost %}
     
 
 {% block post_content %}
     <div class="col-md-8  mt-3">
-        <form action="{% url 'posts:create' %}" method="post">
+        <form action="{% url 'posts:create' pk=group_pk %}" method="POST">
             {% csrf_token %}
             {% bootstrap_form form %}
 
