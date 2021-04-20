@@ -56,13 +56,17 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     {% if user.is_authenticated %}
-                        <li class="nav-item mr-3"><a class="nav-link" href="{% url 'posts:create' %}">Post</a></li>
-                        <li class="nav-item mr-3"><a class="nav-link" href="{% url 'groups:all' %}">Groups</a></li>
-                        <li class="nav-item mr-3"><a class="nav-link" href="{% url 'groups:create' %}">Create Group</a></li>
+                        <li class="nav-item mr-2">
+                            <a class="nav-link" href="{% url 'posts:for_user' username=user.username %}">
+                                @{{ user.username }}
+                            </a>
+                        </li>
+                        <li class="nav-item mr-2"><a class="nav-link" href="{% url 'groups:all' %}">Groups</a></li>
+                        <li class="nav-item mr-2"><a class="nav-link" href="{% url 'groups:create' %}">Create Group</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">Log Out</a></li>
                     {% else %}
-                        <li class="nav-item mr-3"><a class="nav-link" href="{% url 'groups:all' %}">Groups</a></li>
-                        <li class="nav-item mr-3"><a class="nav-link" href="{% url 'accounts:login' %}">Log in</a></li>
+                        <li class="nav-item mr-2"><a class="nav-link" href="{% url 'groups:all' %}">Groups</a></li>
+                        <li class="nav-item mr-2"><a class="nav-link" href="{% url 'accounts:login' %}">Log in</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a></li>
                     {% endif %}
                 </ul>
