@@ -70,7 +70,7 @@
             {% endfor %}
 
             {% if page_obj.has_next %}
-                <a class='btn btn-info mb-4'href="?page={{ page_ob.next_page_number }}">Next</a>
+                <a class='btn btn-info mb-4'href="?page={{ page_obj.next_page_number }}">Next</a>
                 <a class='btn btn-info mb-4'href="?page={{ page_obj.paginator.num_pages }}">Previous</a>
             {% endif %}
                 
