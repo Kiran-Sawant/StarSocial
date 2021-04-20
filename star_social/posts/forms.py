@@ -1,8 +1,23 @@
-from .models import Comments
+from .models import (Post, Comments)
 from django import forms
 
 
+class PostForm(forms.ModelForm):
+    """A ModelForm for posts."""
+
+    class Meta:
+        model   = Post
+        fields  = ('message', )
+        widgets = { 'message': forms.Textarea(attrs={'placeholder': 'Add Post'})}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['message'].label = 'Post: '
+
+
 class CommentForm(forms.ModelForm):
+    """A ModelForm for Comments."""
+
     class Meta:
         model = Comments
         fields = ('text',)
