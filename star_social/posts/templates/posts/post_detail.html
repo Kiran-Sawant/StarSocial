@@ -1,15 +1,33 @@
 {% extends 'posts/post_base.html' %}
 
 
+{% block prepost %}
+    <div class="col-md-4 mt-3">
+        <a href="{{ post.group.get_absolute_url }}">
+            <h1 style="color: white;"><u>{{ post.group.name }}</u></h1>
+        </a>
+        <div class="mb-1">
+            <p>{{ post.group.description_html|safe }}</p>
+            <hr style="border-color: gold;">
+        </div>
+        <div class="inline-flex">
+            <span> {{post.group.members.count}} Member{{post.group.members.count|pluralize}}</span>
+            <span style="border-left:solid 0.5mm white; padding-left:2mm">{{ post.group.groupposts.count}} Post{{ post.group.groupposts.count|pluralize}}</span>
+        </div>
+    </div>
+{% endblock prepost %}
+    
+
+
 {% block post_content %}
     <div class="col-md-8 mt-3">
         {% include 'posts/_post.html' with trunc=True %}
-    </div>
+    <!-- </div> -->
     <hr>
     
     <!-- Comments block -->
-    <div class="container">
-        <h2>Comments:-</h2>
+    <!-- <div class="container"> -->
+        <h2><u>Comments:</u></h2>
         <div class="container ml-3 mt-3" style="width: 40rem;">
             {% for comment in object_list %}
             
@@ -49,7 +67,7 @@
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                    <a class='btn btn-info mb-4'href="?page={{ page_ob.next_page_number }}">Next</a>
+                    <a class='btn btn-info mb-4'href="?page={{ page_obj.next_page_number }}">Next</a>
                     <a class='btn btn-info mb-4'href="?page={{ page_obj.paginator.num_pages }}">Previous</a>
                 {% endif %}                    
             {% endif %}
