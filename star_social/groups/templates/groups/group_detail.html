@@ -5,13 +5,25 @@
         <h1><u>{{ group.name }}</u></h1>
         <div class="mb-1">
             <p>{{ group.description_html|safe }}</p>
+            <p>admin: <a href="{% url 'posts:for_user' username=group.created_by.username %}" style="color: gold;">@{{ group.created_by }}</a></p>
+
             <hr style="border-color: gold;">
         </div>
         <div class="inline-flex">
             <span> {{group.members.count}} Member{{group.members.count|pluralize}}</span>
             <span style="border-left:solid 0.5mm white; padding-left:2mm">{{group.groupposts.count}} Post{{group.groupposts.count|pluralize}}</span>
         </div>
-        
+
+        <div class="post mt-3">
+            
+            {% if user in group.members.all %}
+                <a href="{% url 'posts:create' pk=group.pk %}" class="btn btn-primary">Post</a>
+            {% else %}
+                <p>Join Group to post</p>
+            {% endif %}
+                
+        </div>
+
         <div class="content mt-3">
             {% if user in group.members.all %}  <!--If the active user is in this group-->
                 <!-- Leave Group Button -->
@@ -35,7 +47,7 @@
 
 {% block group_content %}
     <div class="col-lg-8 mt-3">
-        {% if group.posts.count == 0 %}
+        {% if group.groupposts.count == 0 %}
             <h2>No posts in this Group yet...</h2>
         {% else %}
             {% for post in object_list %}
@@ -62,7 +74,7 @@
                 {% endfor %}
 
                 {% if page_obj.has_next %}
-                    <a class='btn btn-info mb-4'href="?page={{ page_ob.next_page_number }}">Next</a>
+                    <a class='btn btn-info mb-4'href="?page={{ page_obj.next_page_number }}">Next</a>
                     <a class='btn btn-info mb-4'href="?page={{ page_obj.paginator.num_pages }}">Previous</a>
                 {% endif %}                    
             {% endif %}
