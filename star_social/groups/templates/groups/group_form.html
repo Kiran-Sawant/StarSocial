@@ -3,14 +3,22 @@
 {% load bootstrap4 %}
 
 
+{% block pregroup %}
+    <div class="col-lg-4">
+        <h1>Create a Group</h1>
+        <h4>description supports markdown</h4>
+    </div>
+{% endblock pregroup %}
+    
+
 {% block group_content %}
-    <h4 class="mt-3 mr-5">Create a new Group!</h4>
+    <div class="col-lg-8">
+        <form action="{% url 'groups:create' %}" method="post" id='groupForm' class='mt-3'>
+            {% csrf_token %}
+            {% bootstrap_form form %}
 
-    <form action="{% url 'groups:create' %}" method="post" id='groupForm' class='mt-3'>
-        {% csrf_token %}
-        {% bootstrap_form form %}
-
-        <input type="submit" class="btn btn-primary btn-large" value="Create">
-    </form>
+            <input type="submit" class="btn btn-primary btn-large" value="Create">
+        </form>
+    </div>
 {% endblock group_content %}
     
