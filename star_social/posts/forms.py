@@ -8,7 +8,8 @@ class PostForm(forms.ModelForm):
     class Meta:
         model   = Post
         fields  = ('message', )
-        widgets = { 'message': forms.Textarea(attrs={'placeholder': 'Add Post'})}
+        widgets = { 'message': forms.Textarea(attrs={'placeholder': 'Add Post',
+                                                        'style': 'height: 70vh'})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
