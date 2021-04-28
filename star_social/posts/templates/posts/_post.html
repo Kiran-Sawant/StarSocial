@@ -36,7 +36,7 @@
             
             {% if user.is_authenticated and post.user == user and not hide_delete %}
                 <!-- Edit Button -->
-                <a class='ml-2' href="{% url 'posts:post_update' username=post.user.username pk=post.pk %}" style="color: whitesmoke; border-left: solid white; padding-left: 3mm;">
+                <a class='ml-2' href="{% url 'posts:post_update' pk=post.pk %}" style="color: whitesmoke; border-left: solid white; padding-left: 3mm;">
                     <b>Edit</b>
                 </a>
                 <!-- Delete button -->
