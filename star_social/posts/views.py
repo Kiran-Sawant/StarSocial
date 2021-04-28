@@ -1,6 +1,6 @@
 from django.shortcuts import (render, get_object_or_404, redirect)
 from django.urls import reverse_lazy, reverse
-from django.http import Http404
+from django.http import (Http404, HttpResponseRedirect)
 from django.views import generic as gen
 from django.views.generic.list import MultipleObjectMixin
 from django.contrib.auth import get_user_model
@@ -144,6 +144,23 @@ class UpdatePost(LoginRequiredMixin, gen.UpdateView):
 
     model = models.Post
     fields = ('message', 'group')
+
+# Function based view implimentation for UpdateView
+def UpdatePost_(request, pk: int):
+
+    context = {}
+    
+    obj = get_object_or_404(models.Post, pk=pk)
+
+    form = forms.PostForm(request.POST or None, instance=obj)
+
+    if form.is_valid():
+        form.save()
+        return redirect(obj)
+    
+    context['form'] = form
+
+    return render(request, "posts/post_update.html", context)
 
 class DeletePost(LoginRequiredMixin, SelectRelatedMixin, gen.DeleteView):
 
