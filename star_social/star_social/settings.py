@@ -26,7 +26,7 @@ SECRET_KEY = '$1j35&a9))+t2j!k6s1hz7dj^o$si02u(gqoxu$5h4emz)4rlr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kiransawant.pythonanywhere.com',]
 
 
 # Application definition
@@ -80,8 +80,11 @@ WSGI_APPLICATION = 'star_social.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE'    : 'django.db.backends.mysql',
+        'NAME'      : 'KiranSawant$default',
+        'USER'      : 'KiranSawant',
+        'PASSWORD'  : 'MargretThacheris100%sexy',
+        'HOST'      : 'KiranSawant.mysql.pythonanywhere-services.com',
     }
 }
 
