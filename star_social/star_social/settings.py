@@ -80,11 +80,8 @@ WSGI_APPLICATION = 'star_social.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE'    : 'django.db.backends.mysql',
-        'NAME'      : 'KiranSawant$default',
-        'USER'      : 'KiranSawant',
-        'PASSWORD'  : 'MargretThacheris100%sexy',
-        'HOST'      : 'KiranSawant.mysql.pythonanywhere-services.com',
+        'ENGINE'    : 'django.db.backends.sqlite3',
+        'NAME'      : BASE_DIR / 'db.sqlite3',
     }
 }
 
