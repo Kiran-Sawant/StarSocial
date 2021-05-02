@@ -1,5 +1,3 @@
 *.pyc
-HEAD
 star_social/star_social/db.sqlite3
 star_social/star_social/settings.py
-dd058a859feed349374db4153bc1750c96df53db
